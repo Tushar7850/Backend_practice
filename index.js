@@ -11,6 +11,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
   fs.readdir(`./files`, function (err, files) {
+    console.log("file", files);
     res.render("index", { files: files });
   });
 });
@@ -18,6 +19,8 @@ app.get("/", (req, res) => {
 
 app.get("/files/:filename", (req, res) => {
 fs.readFile(`./files/${req.params.filename}`,'utf-8', function (err, filedata) {
+  console.log('filedata',filedata);
+  
    res.render('show',{
     filename: req.params.filename,
     filedata:filedata
@@ -40,7 +43,9 @@ app.post("/create", (req, res) => {
 
 app.post("/edit", (req, res) => {
 fs.rename( `./files/${req.body.previous}`,`./files/${req.body.new}`,function(err){
-    res.redirect('/')
+  err ? console.log('error', err) :  res.redirect('/')
+  
+
 })
 });
 
